@@ -44,8 +44,8 @@ releases: linux macos-amd64 macos-arm64 win64 win32
 	gzip $(BINDIR)/$(NAME)-linux
 	gzip $(BINDIR)/$(NAME)-macos-amd64
 	gzip $(BINDIR)/$(NAME)-macos-arm64
-	zip -m -j $(BINDIR)/$(NAME)-win32.zip $(BINDIR)/$(NAME)-win32.exe
 	zip -m -j $(BINDIR)/$(NAME)-win64.zip $(BINDIR)/$(NAME)-win64.exe
+	zip -m -j $(BINDIR)/$(NAME)-win32.zip $(BINDIR)/$(NAME)-win32.exe
 
 clean:
 	rm $(BINDIR)/*

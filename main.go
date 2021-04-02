@@ -88,6 +88,7 @@ func main() {
 	}
 
 	if flags.Client != "" { // client mode
+		fmt.Println("Client mode")
 		addr := flags.Client
 		cipher := flags.Cipher
 		password := flags.Password
@@ -115,6 +116,7 @@ func main() {
 		}
 
 		if flags.UDPTun != "" {
+			fmt.Println("UDP tunneling: on")
 			for _, tun := range strings.Split(flags.UDPTun, ",") {
 				p := strings.Split(tun, "=")
 				go udpLocal(p[0], udpAddr, p[1], ciph.PacketConn)
@@ -122,6 +124,7 @@ func main() {
 		}
 
 		if flags.TCPTun != "" {
+			fmt.Println("TCP tunneling: on")
 			for _, tun := range strings.Split(flags.TCPTun, ",") {
 				p := strings.Split(tun, "=")
 				go tcpTun(p[0], addr, p[1], ciph.StreamConn)
@@ -137,15 +140,19 @@ func main() {
 		}
 
 		if flags.RedirTCP != "" {
+			fmt.Println("Local TCP4 proxy: on")
 			go redirLocal(flags.RedirTCP, addr, ciph.StreamConn)
 		}
 
 		if flags.RedirTCP6 != "" {
+			fmt.Println("Local TCP6 proxy: on")
 			go redir6Local(flags.RedirTCP6, addr, ciph.StreamConn)
 		}
 	}
 
 	if flags.Server != "" { // server mode
+		fmt.Println("Server mode")
+
 		addr := flags.Server
 		cipher := flags.Cipher
 		password := flags.Password
@@ -173,9 +180,11 @@ func main() {
 		}
 
 		if flags.UDP {
+			fmt.Println("UDP remote: on")
 			go udpRemote(udpAddr, ciph.PacketConn)
 		}
 		if flags.TCP {
+			fmt.Println("TCP remote: on")
 			go tcpRemote(addr, ciph.StreamConn)
 		}
 	}
