@@ -180,11 +180,11 @@ func main() {
 		}
 
 		if flags.UDP {
-			fmt.Println("UDP remote: on")
+			logf("UDP remote: on addr %s", addr)
 			go udpRemote(udpAddr, ciph.PacketConn)
 		}
 		if flags.TCP {
-			fmt.Println("TCP remote: on")
+			logf("TCP remote: on addr %s", addr)
 			go tcpRemote(addr, ciph.StreamConn)
 		}
 	}

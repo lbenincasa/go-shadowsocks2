@@ -26,7 +26,8 @@ func tcpTun(addr, server, target string, shadow func(net.Conn) net.Conn) {
 		logf("invalid target address %q", target)
 		return
 	}
-	logf("TCP tunnel %s <-> %s <-> %s", addr, server, target)
+	// Beni: target e' la stringa target richiesta, tgt e' la stringa di richiesta codificata in socks 5 protocol (tramite la funzione ParseAddr)
+	logf("TCP tunnel %s <-> %s <-> %s (%d %d)", addr, server, target, tgt[0], tgt[1])
 	tcpLocal(addr, server, shadow, func(net.Conn) (socks.Addr, error) { return tgt, nil })
 }
 
@@ -107,6 +108,7 @@ func tcpRemote(addr string, shadow func(net.Conn) net.Conn) {
 			logf("failed to accept: %v", err)
 			continue
 		}
+		logf("accepted TCP socket on local %s, remote %s", c.LocalAddr(), c.RemoteAddr())
 
 		go func() {
 			defer c.Close()
@@ -135,9 +137,13 @@ func tcpRemote(addr string, shadow func(net.Conn) net.Conn) {
 			defer rc.Close()
 
 			logf("proxy %s <-> %s", c.RemoteAddr(), tgt)
-			if err = relay(sc, rc); err != nil {
+			err = relay(sc, rc)
+			if err != nil {
 				logf("relay error: %v", err)
+			} else {
+				logf("end proxying %s <-> (%s) <-> %s", c.RemoteAddr(), tgt, tgt)
 			}
+
 		}()
 	}
 }
